@@ -1,0 +1,248 @@
+body {
+  font-family: 'Nunito', sans-serif;
+  margin: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.upload {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.dropzone {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 3px solid #000;
+  padding: 32px;
+  cursor: pointer;
+  margin-bottom: 32px;
+  width: 300px;
+  height: 200px;
+  text-align: center;
+  font-size: 20px;
+  box-shadow: 8px 8px 0 #00000077;
+}
+
+.dropzone:hover,
+.dropzone:focus {
+  box-shadow: 8px 8px 0 #000000;
+  outline: none;
+}
+
+.paste {
+  width: 300px;
+  text-align: center;
+  padding: 16px;
+  height: auto;
+  resize: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+}
+
+.paste:hover::placeholder {
+  color:black;
+}
+
+.panels {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.panel {
+  height: 100%;
+  width: calc(50% - 1px);
+  box-sizing: border-box;
+  overflow: auto;
+  background-color: #ddd;
+  background-image: linear-gradient(-45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent);
+}
+
+.divider {
+  width: 1px;
+  background: #000;
+  height: 100%;
+}
+
+.controls-container {
+  display: flex;
+  overflow: hidden;
+  background-color: #eee;
+  border-bottom: 1px solid #000;
+  border-top: 1px solid #000;
+}
+
+.controls-panel {
+  width: 50vw;
+  padding: 16px;
+  overflow: auto;
+}
+
+.button {
+  align-items: center;
+  border: 1px solid #444;
+  background: none;
+  box-sizing: border-box;
+  color: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  flex-shrink: 0;
+  font-size: inherit;
+  justify-content: center;
+  line-height: 1;
+  overflow: hidden;
+  padding: 0.5em 1em;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  transition: background-color 0.25s, transform 0.25s;
+  white-space: nowrap;
+}
+
+.button:hover {
+  background: #d6d6d670;
+}
+
+.button:active {
+  transform: translateY(2px);
+}
+
+.button:focus {
+  outline: none;
+}
+
+.button-mini {
+  padding: 4px 8px;
+}
+
+.button-group .button:not(:last-child) {
+  margin-right: 8px;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  margin: 8px 0;
+}
+
+.close {
+  border-color: transparent;
+  margin-left: 8px;
+}
+
+.snackbar {
+  width: 400px !important;
+  margin-left: -200px !important;
+}
+
+.output-url {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 400px;
+}
+
+.scale-input {
+  width: 5em;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+}
+
+.header-section {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  flex: 1;
+}
+
+.header-actions {
+  flex-shrink: 0;
+  justify-content: flex-end;
+}
+
+.filename {
+  border: none;
+  font-size: inherit;
+  border-bottom: 2px solid transparent;
+  padding: 4px;
+  margin: 0 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.filename:hover,
+.filename:focus
+{
+  outline: none;
+  border-color: #000;
+}
+
+.logo {
+  height: 32px;
+  width: 32px;
+  background-image: url("/icon-192.png");
+  background-size: contain;
+  background-position: center center;
+  flex-shrink: 0;
+}
+
+.fullscreen .logo {
+  height: 128px;
+  width: 128px;
+}
+
+.scale-range {
+  margin-right: 8px;
+}
+
+.half {
+  margin-left: 8px;
+}
+
+.github-corner {
+  display: flex;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10000;
+}
+
+.github-corner .github-icon {
+  fill: #00000077;
+  color: #fff;
+}
+
+.github-corner:hover .github-icon {
+  fill: #000000;
+}
+
+.github-corner .octo-arm {
+  transform-origin:130px 106px
+}
+
+.github-corner .octo-arm {
+  transform-origin:130px 106px
+}
+
+.github-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+
