@@ -316,7 +316,7 @@ export const App: React.FC = () => {
                   🖼️
                   {Math.round(size.width)}
                   {' x '}
-                  {Math.round(size.height)}px ({debouncedScale})
+                  {Math.round(size.height)}px ({debouncedScale}%)
                 </div>
               )}
 
