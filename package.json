@@ -4,6 +4,7 @@
   "private": true,
   "license": "MIT",
   "repository": "hubgit/pngaroo",
+  "description": "A web app for resizing and converting PNG files to Base64 data URIs",
   "scripts": {
     "now-dev": "webpack-dev-server --port $PORT",
     "now-build": "webpack --mode=production",
