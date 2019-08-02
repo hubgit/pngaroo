@@ -168,6 +168,9 @@ body {
   display: flex;
   align-items: center;
   overflow: hidden;
+}
+
+.header-filename {
   flex: 1;
 }
 

@@ -233,7 +233,7 @@ export const App: React.FC = () => {
       })}
     >
       <nav className={'header'}>
-        <div className={'header-section'}>
+        <div className={'header-section header-filename'}>
           <div className={'logo'} />
 
           {filename && (
