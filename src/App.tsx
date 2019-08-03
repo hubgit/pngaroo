@@ -1,4 +1,3 @@
-import { createSnackbar } from '@egoist/snackbar'
 import classnames from 'classnames'
 import copy from 'clipboard-copy'
 import { saveAs } from 'file-saver'
@@ -7,7 +6,8 @@ import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import './App.css'
 import { GitHubCorner } from './GitHubCorner'
-import { ServiceWorker, ServiceWorkerContext } from './ServiceWorker'
+import { ServiceWorkerContext } from './ServiceWorker'
+import { Snack } from './Snack'
 
 const useDebounce = <T extends unknown>(value: T, delay: number) => {
   const [debouncedValue, setDebouncedValue] = useState(value)
@@ -40,6 +40,7 @@ export const App: React.FC = () => {
   const [output, setOutput] = useState<Blob>()
   const [outputURL, setOutputURL] = useState<string>()
   const [scale, setScale] = useState<number>(100)
+  const [notification, setNotification] = useState()
 
   const debouncedScale = useDebounce(scale, 100)
 
@@ -164,19 +165,33 @@ export const App: React.FC = () => {
     if (outputURL) {
       copy(outputURL)
         .then(() => {
-          createSnackbar('Copied to clipboard', {
-            timeout: 2500,
-          })
+          setNotification(
+            <Snack
+              message={'Copied to clipboard'}
+              actions={[
+                {
+                  text: 'Dismiss',
+                  callback: () => setNotification(undefined),
+                },
+              ]}
+            />
+          )
         })
         .catch(error => {
           console.error(error)
 
-          createSnackbar('Error copying to clipboard', {
-            theme: {
-              backgroundColor: 'red',
-              textColor: 'white',
-            },
-          })
+          setNotification(
+            <Snack
+              message={'Error copying to clipboard'}
+              className={'snack-error'}
+              actions={[
+                {
+                  text: 'Dismiss',
+                  callback: () => setNotification(undefined),
+                },
+              ]}
+            />
+          )
         })
     }
   }, [outputURL])
@@ -396,6 +411,8 @@ export const App: React.FC = () => {
           </div>
         </div>
       )}
+
+      {notification}
     </div>
   )
 }

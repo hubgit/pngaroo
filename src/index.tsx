@@ -1,4 +1,3 @@
-import '@egoist/snackbar/dist/snackbar.css'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { App } from './App'
