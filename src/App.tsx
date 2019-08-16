@@ -5,7 +5,7 @@ import filesize from 'filesize'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import './App.css'
-import { GitHubCorner } from './GitHubCorner'
+import { InfoLink } from './InfoLink'
 import { ServiceWorkerContext } from './ServiceWorker'
 import { Snack } from './Snack'
 
@@ -247,9 +247,11 @@ export const App: React.FC = () => {
         fullscreen: !inputFile,
       })}
     >
-      <nav className={'header'}>
-        <div className={'header-section header-filename'}>
+      <nav className={'nav'}>
+        <div className={'nav-group header-filename'}>
           <div className={'logo'} />
+
+          {!inputFile && <span className={'brand'}>Pngaroo</span>}
 
           {filename && (
             <input
@@ -262,7 +264,14 @@ export const App: React.FC = () => {
           )}
         </div>
 
-        <div className={'header-section header-actions'}>
+        <div className={'nav-group header-actions'}>
+          {!inputFile && (
+            <InfoLink
+              href={'https://github.com/hubgit/pngaroo'}
+              title={'View source on GitHub'}
+            />
+          )}
+
           {inputFile && (
             <button className={'button close'} onClick={handleClose}>
               ✕
@@ -296,23 +305,23 @@ export const App: React.FC = () => {
         </div>
       )}
 
-      {!inputFile && <GitHubCorner repo={'hubgit/pngaroo'} />}
-
       {output && (
         <div className={'controls-container'}>
           <div className={'controls-panel'}>
-            <div>
-              <div>INPUT</div>
+            <div className={'file-meta'}>
+              <div className={'file-meta-section'}>INPUT</div>
+
               {inputImage && (
-                <div>
+                <div className={'file-meta-section'}>
                   🖼️
                   {inputImage.naturalWidth}
                   {' x '}
                   {inputImage.naturalHeight}px
                 </div>
               )}
+
               {inputFile && (
-                <div>
+                <div className={'file-meta-section'}>
                   💾
                   {filesize(inputFile.size, {
                     round: 1,
@@ -323,11 +332,11 @@ export const App: React.FC = () => {
           </div>
 
           <div className={'controls-panel'}>
-            <div>
-              <div>OUTPUT</div>
+            <div className={'file-meta'}>
+              <div className={'file-meta-section'}>OUTPUT</div>
 
               {size && (
-                <div className={'output-section'}>
+                <div className={'file-meta-section'}>
                   🖼️
                   {Math.round(size.width)}
                   {' x '}
@@ -336,15 +345,41 @@ export const App: React.FC = () => {
               )}
 
               {output && inputFile && (
-                <>
-                  <div className={'output-section'}>
-                    💾
-                    {filesize(output.size, {
-                      round: 1,
-                    })}{' '}
-                    ({Math.round((output.size / inputFile.size) * 100)}%)
-                  </div>
+                <div className={'file-meta-section'}>
+                  💾
+                  {filesize(output.size, {
+                    round: 1,
+                  })}{' '}
+                  ({Math.round((output.size / inputFile.size) * 100)}%)
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
+      {inputFile && (
+        <div className={'panels'}>
+          <div className={'panel'}>
+            <canvas ref={inputCanvasMounted} className={'input'} />
+          </div>
+
+          <div className={'divider'} />
+
+          <div className={'panel'}>
+            <canvas ref={outputCanvasMounted} className={'output'} />
+          </div>
+        </div>
+      )}
+
+      {output && (
+        <div className={'controls-container'}>
+          <div className={'controls-panel'} />
+
+          <div className={'controls-panel'}>
+            <div>
+              {output && inputFile && (
+                <>
                   <div className={'output-section controls'}>
                     <label>
                       <input
@@ -394,20 +429,6 @@ export const App: React.FC = () => {
                 </>
               )}
             </div>
-          </div>
-        </div>
-      )}
-
-      {inputFile && (
-        <div className={'panels'}>
-          <div className={'panel'}>
-            <canvas ref={inputCanvasMounted} className={'input'} />
-          </div>
-
-          <div className={'divider'} />
-
-          <div className={'panel'}>
-            <canvas ref={outputCanvasMounted} className={'output'} />
           </div>
         </div>
       )}

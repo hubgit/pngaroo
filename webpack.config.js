@@ -38,7 +38,7 @@ module.exports = {
       },
     ]),
     new HtmlWebpackPlugin({
-      template: 'templates/index.ejs',
+      template: 'templates/index.html',
       title,
     }),
     new WorkboxWebpackPlugin.GenerateSW({
