@@ -40,7 +40,7 @@ export const App: React.FC = () => {
   const [output, setOutput] = useState<Blob>()
   const [outputURL, setOutputURL] = useState<string>()
   const [scale, setScale] = useState<number>(100)
-  const [notification, setNotification] = useState()
+  const [notification, setNotification] = useState<React.ReactElement>()
 
   const debouncedScale = useDebounce(scale, 100)
 
@@ -133,7 +133,7 @@ export const App: React.FC = () => {
           const outputURL = canvas.toDataURL('image/png')
           setOutputURL(outputURL)
 
-          canvas.toBlob(output => {
+          canvas.toBlob((output) => {
             if (output) {
               setOutput(output)
             }
@@ -147,7 +147,7 @@ export const App: React.FC = () => {
   )
 
   // handle scale changes
-  const handleScale = useCallback(event => {
+  const handleScale = useCallback((event) => {
     setScale(event.target.value)
   }, [])
 
@@ -177,7 +177,7 @@ export const App: React.FC = () => {
             />
           )
         })
-        .catch(error => {
+        .catch((error) => {
           console.error(error)
 
           setNotification(
@@ -208,7 +208,7 @@ export const App: React.FC = () => {
     accept: 'image/*',
   })
 
-  const handleFilenameChange = useCallback(event => {
+  const handleFilenameChange = useCallback((event) => {
     setFilename(event.target.value)
   }, [])
 
@@ -237,7 +237,7 @@ export const App: React.FC = () => {
   }, [])
 
   const handleHalf = useCallback(() => {
-    setScale(value => Math.round(value / 2))
+    setScale((value) => Math.round(value / 2))
   }, [])
 
   return (

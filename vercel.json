@@ -1,7 +1,6 @@
 {
   "version": 2,
-  "name": "pngaroo",
-  "alias": "pngaroo",
+  "alias": "pngaroo.now.sh",
   "builds": [
     {
       "src": "package.json",

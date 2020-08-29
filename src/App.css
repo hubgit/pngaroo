@@ -231,7 +231,7 @@ a {
 .logo {
   height: 32px;
   width: 32px;
-  background-image: url("/icon-192.png");
+  /*background-image: url("/icon-192.png");*/
   background-size: contain;
   background-position: center center;
   flex-shrink: 0;

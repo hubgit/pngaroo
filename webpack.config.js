@@ -30,13 +30,15 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
-    new CopyWebpackPlugin([
-      {
-        from: 'static',
-        // to: '[name].[hash].[ext]',
-        // toType: 'template',
-      },
-    ]),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: 'static',
+          // to: '[name].[hash].[ext]',
+          // toType: 'template',
+        },
+      ]
+    }),
     new HtmlWebpackPlugin({
       template: 'templates/index.html',
       title,

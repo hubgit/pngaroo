@@ -10,7 +10,7 @@ export const ServiceWorker: React.FC<{
   scriptURL?: string
 }> = React.memo(({ children, scriptURL = '/service-worker.js' }) => {
   const [registration, setRegistration] = useState<ServiceWorkerRegistration>()
-  const [notification, setNotification] = useState()
+  const [notification, setNotification] = useState<React.ReactElement>()
 
   useEffect(() => {
     if (process.env.NODE_ENV !== 'production') {
@@ -26,7 +26,7 @@ export const ServiceWorker: React.FC<{
         window.location.reload()
       })
 
-      workbox.messageSW({ type: 'SKIP_WAITING' }).catch(error => {
+      workbox.messageSW({ type: 'SKIP_WAITING' }).catch((error) => {
         console.error(error)
       })
     }
@@ -50,7 +50,7 @@ export const ServiceWorker: React.FC<{
     workbox
       .register()
       .then(setRegistration)
-      .catch(error => {
+      .catch((error) => {
         console.error(error)
       })
 
@@ -61,7 +61,7 @@ export const ServiceWorker: React.FC<{
 
   const updateCheck = useCallback(() => {
     if (registration) {
-      registration.update().catch(error => {
+      registration.update().catch((error) => {
         console.error(error)
       })
     }

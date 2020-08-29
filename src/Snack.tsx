@@ -17,7 +17,7 @@ export const Snack: React.FC<{
     <div className={classnames('snack', className)}>
       <div>{message}</div>
       <div>
-        {actions.map(action => (
+        {actions.map((action) => (
           <button
             key={action.text}
             className={classnames('snack-button', action.className)}

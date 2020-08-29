@@ -1,10 +1,10 @@
 ## Development
 
-Run `now dev` to start serving the app.
+Run `vc dev` to start serving the app.
 
 ## Deployment
 
-Run `now --target production` to deploy the app via [Now](https://now.sh).
+Run `vc --prod` to deploy the app via [Vercel](https://vercel.com).
 
 ## Bundle Analysis
 
