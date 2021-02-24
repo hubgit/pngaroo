@@ -23,9 +23,7 @@ const plugins = [
 ]
 
 if (process.env.NODE_ENV === 'production') {
-  plugins.push(new WorkboxWebpackPlugin.GenerateSW({
-    swDest: 'service-worker.js',
-  }))
+  plugins.push(new WorkboxWebpackPlugin.GenerateSW())
 }
 
 module.exports = {
