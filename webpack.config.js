@@ -3,7 +3,30 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin')
 
-const title = 'Pngaroo' // EDIT THIS
+const title = 'Pngaroo'
+
+const plugins = [
+  new CleanWebpackPlugin(),
+  new CopyWebpackPlugin({
+    patterns: [
+      {
+        from: 'static',
+        // to: '[name].[hash].[ext]',
+        // toType: 'template',
+      },
+    ]
+  }),
+  new HtmlWebpackPlugin({
+    template: 'templates/index.html',
+    title,
+  }),
+]
+
+if (process.env.NODE_ENV === 'production') {
+  plugins.push(new WorkboxWebpackPlugin.GenerateSW({
+    swDest: 'service-worker.js',
+  }))
+}
 
 module.exports = {
   module: {
@@ -28,25 +51,7 @@ module.exports = {
   performance: {
     hints: false,
   },
-  plugins: [
-    new CleanWebpackPlugin(),
-    new CopyWebpackPlugin({
-      patterns: [
-        {
-          from: 'static',
-          // to: '[name].[hash].[ext]',
-          // toType: 'template',
-        },
-      ]
-    }),
-    new HtmlWebpackPlugin({
-      template: 'templates/index.html',
-      title,
-    }),
-    new WorkboxWebpackPlugin.GenerateSW({
-      swDest: 'service-worker.js',
-    }),
-  ],
+  plugins,
   devServer: {
     contentBase: './dist',
   },
