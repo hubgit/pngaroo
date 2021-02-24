@@ -67,12 +67,23 @@ export const App: React.FC = () => {
     updateCheck()
 
     if (inputFile) {
-      setFilename(inputFile.name)
+      setFilename(inputFile.name.replace(/\.(\w+)$/, '.png'))
 
       const inputURL = URL.createObjectURL(inputFile)
 
       const image = new Image()
-      image.src = inputURL
+      // image.src = inputURL
+
+      // workaround to allow rendering SVG with foreignObject without tainting canvas
+      const reader = new FileReader();
+      reader.readAsDataURL(inputFile);
+
+      reader.onload = function(event) {
+        if (event.target) {
+          image.src = event.target.result as string
+        }
+      }
+
       image.addEventListener('load', () => {
         setInputImage(image)
       })
@@ -287,10 +298,10 @@ export const App: React.FC = () => {
 
             <section>
               {isDragActive ? (
-                <div>Drop a PNG…</div>
+                <div>Drop an image…</div>
               ) : (
                 <div>
-                  Drag a PNG
+                  Drag an image
                   <br /> or click to select a file
                 </div>
               )}
