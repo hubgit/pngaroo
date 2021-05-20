@@ -30,6 +30,8 @@ interface Size {
   height: number
 }
 
+const INITIAL_SCALE = 50
+
 export const App: React.FC = () => {
   const updateCheck = useContext(ServiceWorkerContext)
 
@@ -39,7 +41,7 @@ export const App: React.FC = () => {
   const [filename, setFilename] = useState<string>()
   const [output, setOutput] = useState<Blob>()
   const [outputURL, setOutputURL] = useState<string>()
-  const [scale, setScale] = useState<number>(100)
+  const [scale, setScale] = useState<number>(INITIAL_SCALE)
   const [notification, setNotification] = useState<React.ReactElement>()
 
   const debouncedScale = useDebounce(scale, 100)
@@ -51,7 +53,7 @@ export const App: React.FC = () => {
     setFilename(undefined)
     setOutput(undefined)
     setOutputURL(undefined)
-    setScale(100)
+    setScale(INITIAL_SCALE)
   }, [])
 
   // handle dropped files
@@ -75,10 +77,10 @@ export const App: React.FC = () => {
       // image.src = inputURL
 
       // workaround to allow rendering SVG with foreignObject without tainting canvas
-      const reader = new FileReader();
-      reader.readAsDataURL(inputFile);
+      const reader = new FileReader()
+      reader.readAsDataURL(inputFile)
 
-      reader.onload = function(event) {
+      reader.onload = function (event) {
         if (event.target) {
           image.src = event.target.result as string
         }
@@ -224,7 +226,7 @@ export const App: React.FC = () => {
   }, [])
 
   const handlePaste = useCallback(
-    (event: React.ClipboardEvent<HTMLTextAreaElement>) => {
+    (event: React.ClipboardEvent<HTMLDivElement>) => {
       event.preventDefault()
 
       if (event.clipboardData) {
@@ -252,27 +254,11 @@ export const App: React.FC = () => {
   }, [])
 
   return (
-    <div
-      className={classnames({
-        container: true,
-        fullscreen: !inputFile,
-      })}
-    >
-      <nav className={'nav'}>
+    <div className={'app'} onPaste={handlePaste}>
+      <header className={'header'}>
         <div className={'nav-group header-filename'}>
           <div className={'logo'} />
-
-          {!inputFile && <span className={'brand'}>Pngaroo</span>}
-
-          {filename && (
-            <input
-              type={'text'}
-              className={'filename'}
-              size={filename.length + 1}
-              value={filename}
-              onChange={handleFilenameChange}
-            />
-          )}
+          <div className={'brand'}>Pngaroo</div>
         </div>
 
         <div className={'nav-group header-actions'}>
@@ -283,16 +269,75 @@ export const App: React.FC = () => {
             />
           )}
 
+          {filename && (
+            <input
+              type={'text'}
+              className={'filename'}
+              size={filename.length + 1}
+              value={filename}
+              onChange={handleFilenameChange}
+            />
+          )}
+
           {inputFile && (
             <button className={'button close'} onClick={handleClose}>
               ✕
             </button>
           )}
         </div>
-      </nav>
+      </header>
 
-      {!inputFile && (
-        <div className={'upload'}>
+      <>
+        <div className={'file-meta before-meta'}>
+          <div className={'file-meta-section'}>INPUT</div>
+
+          {inputImage && (
+            <div className={'file-meta-section'}>
+              🖼️
+              {inputImage.naturalWidth}
+              {' x '}
+              {inputImage.naturalHeight}px
+            </div>
+          )}
+
+          {inputFile && (
+            <div className={'file-meta-section'}>
+              💾
+              {filesize(inputFile.size, {
+                round: 1,
+              })}
+            </div>
+          )}
+        </div>
+
+        <div className={'file-meta after-meta'}>
+          <div className={'file-meta-section'}>OUTPUT</div>
+
+          {size && (
+            <div className={'file-meta-section'}>
+              🖼️
+              {Math.round(size.width)}
+              {' x '}
+              {Math.round(size.height)}px ({debouncedScale}%)
+            </div>
+          )}
+
+          {output && inputFile && (
+            <div className={'file-meta-section'}>
+              💾
+              {filesize(output.size, {
+                round: 1,
+              })}{' '}
+              ({Math.round((output.size / inputFile.size) * 100)}%)
+            </div>
+          )}
+        </div>
+      </>
+
+      <div className={'before'}>
+        {inputImage ? (
+          <canvas ref={inputCanvasMounted} className={'input'} />
+        ) : (
           <div {...getRootProps()} className={'dropzone'}>
             <input {...getInputProps()} />
 
@@ -301,148 +346,78 @@ export const App: React.FC = () => {
                 <div>Drop an image…</div>
               ) : (
                 <div>
-                  Drag an image
-                  <br /> or click to select a file
+                  Drag an image,
+                  <br />
+                  click to select a file,
+                  <br />
+                  or paste an image
                 </div>
               )}
             </section>
           </div>
+        )}
+      </div>
 
-          <textarea
-            className={'paste'}
-            onPaste={handlePaste}
-            placeholder={'or paste an image here'}
-          />
-        </div>
-      )}
+      <div className={'divider'} />
 
-      {output && (
-        <div className={'controls-container'}>
-          <div className={'controls-panel'}>
-            <div className={'file-meta'}>
-              <div className={'file-meta-section'}>INPUT</div>
+      <div className={'after'}>
+        <canvas ref={outputCanvasMounted} className={'output'} />
+      </div>
 
-              {inputImage && (
-                <div className={'file-meta-section'}>
-                  🖼️
-                  {inputImage.naturalWidth}
-                  {' x '}
-                  {inputImage.naturalHeight}px
-                </div>
-              )}
+      <div className={'controls-container'}>
+        <div className={'controls-panel'} />
 
-              {inputFile && (
-                <div className={'file-meta-section'}>
-                  💾
-                  {filesize(inputFile.size, {
-                    round: 1,
-                  })}
-                </div>
-              )}
-            </div>
-          </div>
+        <div className={'controls-panel'}>
+          <div>
+            <>
+              <div className={'output-section controls'}>
+                <label>
+                  <input
+                    type={'range'}
+                    className={'scale-range'}
+                    value={scale}
+                    onChange={handleScale}
+                    step={1}
+                    min={0}
+                    max={100}
+                  />
+                  <input
+                    type={'number'}
+                    value={scale}
+                    onChange={handleScale}
+                    className={'scale-input'}
+                  />
+                  %
+                </label>
 
-          <div className={'controls-panel'}>
-            <div className={'file-meta'}>
-              <div className={'file-meta-section'}>OUTPUT</div>
+                <button
+                  className={'button button-mini half'}
+                  onClick={handleHalf}
+                >
+                  ½
+                </button>
+              </div>
 
-              {size && (
-                <div className={'file-meta-section'}>
-                  🖼️
-                  {Math.round(size.width)}
-                  {' x '}
-                  {Math.round(size.height)}px ({debouncedScale}%)
-                </div>
-              )}
-
-              {output && inputFile && (
-                <div className={'file-meta-section'}>
-                  💾
-                  {filesize(output.size, {
-                    round: 1,
-                  })}{' '}
-                  ({Math.round((output.size / inputFile.size) * 100)}%)
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {inputFile && (
-        <div className={'panels'}>
-          <div className={'panel'}>
-            <canvas ref={inputCanvasMounted} className={'input'} />
-          </div>
-
-          <div className={'divider'} />
-
-          <div className={'panel'}>
-            <canvas ref={outputCanvasMounted} className={'output'} />
+              <div className={'output-section controls button-group'}>
+                <button
+                  className={'button button-mini'}
+                  onClick={handleDownload}
+                  disabled={!output || !filename}
+                >
+                  Download PNG
+                </button>
+                <button
+                  className={'button button-mini'}
+                  onClick={handleCopy}
+                  disabled={!outputURL}
+                >
+                  Copy Base64 URL
+                </button>
+              </div>
+            </>
           </div>
         </div>
-      )}
-
-      {output && (
-        <div className={'controls-container'}>
-          <div className={'controls-panel'} />
-
-          <div className={'controls-panel'}>
-            <div>
-              {output && inputFile && (
-                <>
-                  <div className={'output-section controls'}>
-                    <label>
-                      <input
-                        type={'range'}
-                        className={'scale-range'}
-                        value={scale}
-                        onChange={handleScale}
-                        step={1}
-                        min={0}
-                        max={100}
-                      />
-                      <input
-                        type={'number'}
-                        value={scale}
-                        onChange={handleScale}
-                        className={'scale-input'}
-                      />
-                      %
-                    </label>
-
-                    <button
-                      className={'button button-mini half'}
-                      onClick={handleHalf}
-                    >
-                      ½
-                    </button>
-                  </div>
-
-                  <div className={'output-section controls button-group'}>
-                    {output && filename && (
-                      <button
-                        className={'button button-mini'}
-                        onClick={handleDownload}
-                      >
-                        Download PNG
-                      </button>
-                    )}
-                    {outputURL && (
-                      <button
-                        className={'button button-mini'}
-                        onClick={handleCopy}
-                      >
-                        Copy Base64 URL
-                      </button>
-                    )}
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
+      </div>
 
       {notification}
     </div>
