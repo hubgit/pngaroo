@@ -6,7 +6,11 @@ const WorkboxWebpackPlugin = require('workbox-webpack-plugin')
 const title = 'Pngaroo'
 
 const plugins = [
-  new CleanWebpackPlugin(),
+  new CleanWebpackPlugin({
+    output: {
+      path: 'dist',
+    },
+  }),
   new CopyWebpackPlugin({
     patterns: [
       {
@@ -14,7 +18,7 @@ const plugins = [
         // to: '[name].[hash].[ext]',
         // toType: 'template',
       },
-    ]
+    ],
   }),
   new HtmlWebpackPlugin({
     template: 'templates/index.html',
