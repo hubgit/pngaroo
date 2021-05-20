@@ -364,58 +364,47 @@ export const App: React.FC = () => {
         <canvas ref={outputCanvasMounted} className={'output'} />
       </div>
 
-      <div className={'controls-container'}>
-        <div className={'controls-panel'} />
+      <div className={'output-controls'}>
+        <div className={'output-section controls'}>
+          <label>
+            <input
+              type={'range'}
+              className={'scale-range'}
+              value={scale}
+              onChange={handleScale}
+              step={1}
+              min={0}
+              max={100}
+            />
+            <input
+              type={'number'}
+              value={scale}
+              onChange={handleScale}
+              className={'scale-input'}
+            />
+            %
+          </label>
 
-        <div className={'controls-panel'}>
-          <div>
-            <>
-              <div className={'output-section controls'}>
-                <label>
-                  <input
-                    type={'range'}
-                    className={'scale-range'}
-                    value={scale}
-                    onChange={handleScale}
-                    step={1}
-                    min={0}
-                    max={100}
-                  />
-                  <input
-                    type={'number'}
-                    value={scale}
-                    onChange={handleScale}
-                    className={'scale-input'}
-                  />
-                  %
-                </label>
+          <button className={'button button-mini half'} onClick={handleHalf}>
+            ½
+          </button>
+        </div>
 
-                <button
-                  className={'button button-mini half'}
-                  onClick={handleHalf}
-                >
-                  ½
-                </button>
-              </div>
-
-              <div className={'output-section controls button-group'}>
-                <button
-                  className={'button button-mini'}
-                  onClick={handleDownload}
-                  disabled={!output || !filename}
-                >
-                  Download PNG
-                </button>
-                <button
-                  className={'button button-mini'}
-                  onClick={handleCopy}
-                  disabled={!outputURL}
-                >
-                  Copy Base64 URL
-                </button>
-              </div>
-            </>
-          </div>
+        <div className={'output-section controls button-group'}>
+          <button
+            className={'button button-mini'}
+            onClick={handleDownload}
+            disabled={!output || !filename}
+          >
+            Download PNG
+          </button>
+          <button
+            className={'button button-mini'}
+            onClick={handleCopy}
+            disabled={!outputURL}
+          >
+            Copy Base64 URL
+          </button>
         </div>
       </div>
 
