@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "alias": "pngaroo.now.sh",
+  "alias": "pngaroo.vercel.app",
   "builds": [
     {
       "src": "package.json",
